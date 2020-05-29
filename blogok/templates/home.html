@@ -9,7 +9,7 @@
               <small class="text-muted">{{ post.date_posted }}</small>
             </div>
             <h2><a class="article-title" href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h2>
-            <img src="{{ post.image.url }}" width="600" class="img-thumbnail" alt=""><br>
+            <img src="{{ post.image.url }}" width="300" height="300" class="img-thumbnail" alt=""><br>
             <a class="mt-4 btn btn-info"  href="{% url 'post_detail' post.id %}">LearnMore</a>
           </div>
         </article>
