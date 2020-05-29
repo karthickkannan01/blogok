@@ -26,7 +26,7 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
-    path('home/', PostListView.as_view(template_name = 'home.html'), name='home'),
+    path('', PostListView.as_view(template_name = 'home.html'), name='home'),
     path('user/<str:username>/', UserPostListView.as_view(template_name = 'user_posts.html'), name='user-posts'),
     path('post/<int:pk>/', PostDetailView.as_view(template_name='post_detail.html'), name='post_detail'),
     path('post-create/', PostCreateView.as_view(template_name='post_form.html'), name='post_create'),
