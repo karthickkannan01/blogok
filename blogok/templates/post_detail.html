@@ -10,10 +10,6 @@
             <h2 class="article-title" >{{ post.title }}</h2>
             <img src="{{ post.image.url }}" alt="" width="600">
             <p class="article-content mt-4">{{ post.content }}</p>
-            <div class="form-group">
-              <a href="{% url 'post_update' post.id %}" class="btn btn-outline-secondary">Update</button>
-              <a href="{% url 'post_delete' post.id %}" class="btn btn-outline-danger ml-2">Delete</a>
-          </div>
           </div>
         </article>
         

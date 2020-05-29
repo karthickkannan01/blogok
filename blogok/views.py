@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from .models import Post, Profile
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import UserUpdate, ProfileUpdate, UserRegisterForm
-from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 
 
 def home(request):
@@ -51,7 +51,7 @@ class PostListView(ListView):
     paginate_by = 5
 
 
-class UserPostListView(ListView):
+class UserPostListView(LoginRequiredMixin, ListView,):
     model = Post
     template_name = 'user_posts.html' 
     context_object_name = 'posts'
@@ -61,10 +61,13 @@ class UserPostListView(ListView):
         user = get_object_or_404(User, username=self.kwargs.get(('username')))
         return Post.objects.filter(author=user).order_by('-date_posted')
 
+    def get_queryset(self):
+        return super(UserPostListView, self).get_queryset().filter(author=self.request.user)
+
 class PostDetailView(DetailView):
     model = Post
     
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin ,CreateView):
     model = Post
     fields = ['title', 'content', 'image']
 
@@ -72,7 +75,7 @@ class PostCreateView(CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin ,UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title', 'content', 'image']
 
@@ -80,6 +83,18 @@ class PostUpdateView(UpdateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class PostDeleteView(DeleteView):
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
+class PostDeleteView(LoginRequiredMixin ,UserPassesTestMixin, DeleteView):
     model = Post
     success_url = '/home/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False

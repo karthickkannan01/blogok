@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1 class="mb-3">Posts by {{view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
+    <h1 class="mb-3">Posts by {{ user.username }} ({{ page_obj.paginator.count }})</h1>
     {% for post in posts %}
         <article class="media content-section">
           <img class="rounded-circle article-img" src="{{ post.author.profile.images.url }}">
@@ -12,6 +12,10 @@
             <h2><a class="article-title" href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h2>
             <img src="{{ post.image.url }}" width="600" class="img-thumbnail" alt="">
             <p class="article-content mt-4">{{ post.content }}</p>
+            <div class="form-group">
+              <a href="{% url 'post_update' post.id %}" class="btn btn-outline-secondary">Update</button>
+              <a href="{% url 'post_delete' post.id %}" class="btn btn-outline-danger ml-2">Delete</a>
+          </div>
           </div>
         </article>
     {% endfor %}
